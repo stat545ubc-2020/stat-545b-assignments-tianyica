@@ -1,42 +1,9 @@
 ---
 title: "Assignment 1-B"
 subtitle: "Version 1.0" 
-output: html_document
+output: github_document
+author: Tianyi Zheng
 ---
-
-__Deadline__: Saturday, November 7, 2020 at 23:59 PST
-
-__Total Points__: 20
-
-This assignment first covers making a function (Exercise 1, covered in Week 1), then using list columns (Exercise 2, covered in Week 2) to explore a data set. 
-
-- [ ] For your convenience, we've indicated all action items with a checkbox, like so.
-
-## Setup
-
-1. [ ] Go to canvas to get your invitation to the STAT 545 homework GitHub Organization. You can find this in the description of Assignment 1-B.
-2. [ ] Work within your `assignment-1b` folder in your new repository, and complete the assignment by filling in this very .Rmd file. Your repo will be seeded with instructions for this milestone. Commit and push your work early and often (although this will not be graded, many students end up in situations where they wish they pushed more frequently).
-
-## Tidy Submission (2 points)
-
-Follow these steps to submit your work. Be sure to familiarize yourself with the rubric for a tidy submission below, before doing these steps.
-
-1. [ ] Make a README file in your `assignment-1b` folder. It should let a visitor know what's in this folder.
-2. [ ] Make/update a main README file for your entire repository. It should orient a visitor to what this repository _is_, and that visitor should know how to engage with the repository. There should not be much here.
-3. [ ] Make your assignment appear nicely rendered and viewable online, such as by changing the output to `output: github_document` in the YAML header. 
-    - You could also use GitHub pages. But, the assignment needs to correspond to the tagged release, and we still need to be able to navigate to your repository somehow.
-4. [ ] Tag a release in your GitHub repository corresponding to your submission before the deadline.
-    - Forgotten how to tag a release? We have instructions at the bottom of the [Collaborative Milestone 1 repo](https://stat545.stat.ubc.ca/collaborative-project/milestone1/readme/) from STAT 545A.
-5. [ ] Grab the URL corresponding to your viewable output from Step 3, and submit that to canvas. Also, please let us know what you thought of this assignment -- any feedback would be appreciated. 
-
-**Rubric**:
-
-- The above steps were followed.
-- Your work is self-contained in the `assignment-1b` folder. 
-- Your work must be reproducible from beginning to end. That is, a member of the teaching team should be able to run all code error-free and reproduce the output files.
-- You use proper English, spelling, and grammar, and write concisely. If there's any uncertainty in determining a grade here, the [UBC MDS writing rubric](https://github.com/UBC-MDS/public/blob/master/rubric/rubric_writing.md) will be referred to.
-- If there's any further uncertainty in determining a grade for this tidy submission portion, the [UBC MDS mechanics rubric](https://github.com/UBC-MDS/public/blob/master/rubric/rubric_mech.md) will be referred to.
-
 
 
 ## Exercise 1: Functions (10 points)
