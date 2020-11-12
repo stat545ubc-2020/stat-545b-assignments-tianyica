@@ -5,132 +5,104 @@ output: github_document
 author: Tianyi Zheng
 ---
 
+Loading Packages
+```{r,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(gapminder)
+library(testthat)
+library(broom)
+```
+
 
 ## Exercise 1: Functions (10 points)
 
-In this exercise, you'll be making a function and fortifying it. The function need not be complicated. The function need not be "serious", but shouldn't be nonsense.
-
-__Function Ideas__
-
-Basic:
-
-- Did you repeat any code for a data analysis in STAT 545A? If so, consider making a function for this action.
-- Write a _wrapper_ around an existing function. 
-  - For example, perhaps accepting a narrower range of inputs (like not allowing logical vectors), or providing a different output.
-  - A specific example: my [`rqdist()` function](https://github.com/vincenzocoia/rqdist/blob/master/R/rqdist.R#L1) is a wrapper around `quantreg::rq()`, narrowing its functionality.
-  - It's usually better to narrow a function's focus than to broaden, so that a function doesn't end up doing too much.
-- Make a function extracting parts of an `"lm"` object that you can't easily access (`broom` aside), or measuring the "difference" between a linear and quadratic fit. 
-- Make a special plot that you'd want to repeat when exploring your data.
-- You might find a function useful to apply for Exercise 2.
-
-Advanced:
-
-- Make a new ggplot2 geom. Need inspiration? Fun ideas count -- [`geom_lime()` and `geom_pint()`](https://github.com/coolbutuseless/geomlime) are great examples (thanks, Asfar, for finding this) -- but it's not enough to make something like `geom_parrot()` based on these functions, because there's not enough original work to answer the questions we have for you.
-- Fit a Beverton-Holt model (or some other scientifically motivated parametric function) to some data via least squares or some other method.
-- [Create your own `broom` tidier function](https://www.tidymodels.org/learn/develop/broom/) for a model that's currently incompatible with `broom` (warning: this uses S3 object oriented programming, but you don't need to implement that for this assignment).
-
-__Caveats__
-
-The first three caveats are prone to a penalty of -1 point.
-
-- __Other sources__: We need to see your own work here. You _can_ use someone's function as inspiration for your function, just be sure to (1) reference the source of inspiration for your function, and (2) you should be able to answer the questions in this Exercise for your own work.
-- __Too simple__: Your function should involve more than just a calculation that you can do with operations like `+`, `-`, `*`, `/`, `&`, `<`, etc. -- even with simple functions like `sqrt()` that have one argument only. But, add a feature like `trim` (as in the `mean()` function, if it makes sense to do so), and you have something that's no longer simple. So, `function(x) x ^ 2` is too simple. But, `function(x) max(x) - min(x)` isn't too simple, because the `max()` and `min()` functions have another option (`na.rm`).
-- __Nonsense__: The function should be sensible. Example of a nonsense function: `function(x, y) x ^ (x + y) + x / y ^ x - 1`. 
-- __Making more than one function__: You might encounter this situation if a task is too big for one function, and you just wouldn't be satisfied with yourself if you only made one function. If so, it sounds like you're well on your way to making an R package in Week 3 (Assignment 2-B), so definitely keep the idea. We'll only be grading one function for this assignment though, so if you make more than one, please let us know which one you'd like to be graded.
-
-
 ### 1.1 Documentation and Design (5)
-
-| Rubric        | Description | Points |
-|---------------|-------------|--------|
-| Documentation | Documentation is complete, according to the instructions. | 1 |
-| Focussed      | Your function doesn't do too many actions -- it does one thing, as described in your description. | 1 |
-| Generalised   | _See below_ | 2 |
-| Format        | _See below_ | 1 |
-
-In the space below, document your function:
-
-- [ ] **Description**: In 1-2 brief sentences, describe what the function does. 
-    - As a model answer, check out the "Description" section (the very first section) in the documentation of an R function that you know and love.
-    - Technical language is OK (like "Generalised Linear Model"), but not a step-by-step written account of each line. If you feel the need to add more details, separate these details from the main description. In fact, many functions have a "Details" section in their documentation! Just check out `lm()` as an example -- but don't go overboard like that.
-- [ ] For each **argument**, 
-    - [ ] Write the argument name.
-    - [ ] Describe the input: What restrictions are there -- should it be a vector? A list? A specific type of vector, like numeric? If there's a default value, specify what the default is.
-    - [ ] Briefly justify (1-2 sentences) your choice of name and (if applicable) default value.
-- [ ] For the **output**:
-    - [ ] Describe the object that's returned. Is it a vector? A list? Is it a numeric vector? What does the object represent?
-    - [ ] Briefly justify (1-2 sentences) your choice of output format.
-
-Here's an elaboration on the rubrics:
-
-
-**Generalised**
-
-Your function should not be specific to a decision that you made for an analysis. Use function arguments to accomplish being able to use this function in other analyses. The following examples are signs that you need to use more arguments to generalise your function:
-
-- Your function should not rely on anything from your working environment.
-- Your function should not rely on "magic numbers" -- pre-selected numbers (or options) that appear inside the function that can't be accessed by a user of the function. 
-    - For example, maybe `quantile(x, type = 1, ...)` appears in your function. The choice of 1 is arbitrary. 
-    - That is, it's arbitrary _unless_ it's specific to your function -- `type = 1` corresponds to the empirical quantile, and this would be fine if your function is _designed_ to calculate the empirical quantile.
-
-Adding additional arguments sometimes means you'll have to think outside of the box as to how you'll design your function, but that's the fun part. 
-
-- At least three of the below are relevant/appropriate, and therefore found in your function (if not, your function may be too simple):
-    - Appropriate `NA` handling, such as with `na.rm`, if relevant (usually relevant for _summarising_ functions that would appear in `dplyr::summarise()` -- typically not in vectorized functions that would appear in `dplyr::mutate()`). 
-    - Appropriate defaults are used, if relevant. (Your justification is considered here).
-    - The ellipsis (`...`) is used as an "argument", if relevant/appropriate.
-    - A "special option" is included, to tweak the function's behaviour. For example, the `trim` argument in the `mean()` function, or `type` in the `quantile()` function. Including this doesn't count if this argument should be absorbed by the ellipsis (can't double-dip the use of ellipsis and this option)
-    - A second special option is included.
-
-
-**Format**
-
-What we're looking for in terms of the __format__ of the input and output:
-
-- Arguments have appropriate names (you should at least have sound justification).
-- Input should not take a rigid form. An example that's too rigid is a data frame that's expected to have special types of columns.  
-- The output is consistent -- for example, always gives a list. An example of inconsistent output: `sapply(1:3, seq_len)` gives a list, and `sapply(1:3, sqrt)` gives an (atomic) vector.
-- The structure of the input and output makes sense. Sometimes the input and output is a natural choice (as in the `sqrt()` function), and other times it's not (as in the `lm()` function).
-- You've made use of data masking when it makes sense to do so, and used curly-curly (`{{ var }}`) in your function code.
-
--------
-
 <!----------- Documentation goes here ---------------------->
 
 **Description**
 
-FILL_THIS_IN
+This function takes a dataset(as a list) of two quantitative variables and fits a single linear regression model from the them,then it displays a scatterplot with fitted regression line. Also, it displays any influential points as color red based on user defined critiria (cut-off for cook's distance).
 
 **Input (Arguments)**
 
-- `FILL_IN_ARGUMENT_NAME`: FILL_IN_WITH_DESCRIPTION
-  - _Justification_: FILL_THIS_IN
-- ...
+- `data`: a list(dataframe, tibble, etc...) with two quantitative variables.
+  - _Justification_: Data means the data that would be used to fit the model and made the plot. There is no default value of data. 
+- `xy`: logicals. If TRUE then the first column of the dataframe would assumed to be independent variable, and vice versa for FALSE. The default if TRUE.
+  - _Justification_: xy means the first column is the independent variable in the regression model, and the second column is the dependent variable. The default is TRUE, which only indicate one of the two possibilties. 
+- `cooksd`: a non-negative numercial value for cook's distance threshold. The default is 0.5.
+  - _Justification_: Cooksd means the Cook's Distance for identifying influential observations. Emprically, a cook's distance above 0.5 would need to be examine, so the default is 0.5.
+- `na.action`: a function which indicates what should happen when the data contain NAs. The default is set by the na.action setting of options, and is na.fail if that is unset. 
+  - _Justification_: Na.action means default actions for NA values, and the default setting is as what is in options.
+  - `verbose`: logicals. If TRUE then print a message on the count of influential observations.
+  - _Justification_: Verbose, and the default is FALSE because it would not print additional message unless user requested.
+- `...`: additional arguments to be passed to the low level regression fitting functions. 
+  - _Justification_: The ellipsis allows for more generalizability.
 
 **Output**
 
-FILL_THIS_IN
+A scatterplot with fitted regression line, and red labelled influential points. 
 
 <!---------------------------------------------------------->
 
 
--------
-
 
 ### 1.2 Write the Function (3)
-
-| Rubric   | Description | Points |
-|----------|-------------|--------|
-| Accuracy | Does your function do what you intended it to do, as per your documentation? | 2 |
-| Messages | Are your messages well-placed in the function, and informative? | 1 |
-
-- [ ] Write your function in the space below, in a code chunk.
-- [ ] Implement at least one of these two message-bearing methods, using conditionals (`if` statements) to do so:
-    - Add useful error messages or warnings: use the `stop()` or `warning()` function in an `if` statement. Ensure the message is informative. In one or two brief sentences: Why did you choose what you chose -- i.e., warning or stop?
-    - Add a `verbose` argument (counts as a "special argument" in 1.2), taking a logical input, that keeps the user up-to-date with messages that print to screen as the function is running. This is mostly relevant for functions that could take a long time to run, but for this assignment, it's OK for any multi-line function.
-
 <!------------ Write your function below here -------------->
+```{r}
+  if(typeof(data)!="list"){
+    stop('The function expect input data as list\n',
+         'but the input is: ', typeof(data)[1])
+  }
+  if(ncol(data)!=2){
+    stop('The function expect two columns\n',
+         'but the input has: ', ncol(data))
+  }
+  if(!is.numeric(data[[1]])|!is.numeric(data[[2]])){
+    stop('The function expect quantinative/numberic variables.')
+  }
+  if(!is.numeric(cooksd)|cooksd<0){
+    stop('cooksd needs to be a non-negative number')
+  }
 
+data %>% 
+  mutate(Infob=cooks.distance(model)>cooksd) %>% 
+  ggplot(aes(x,y))+
+  geom_point(aes(color=Infob))+
+  geom_smooth(method=lm, se=FALSE)+
+  scale_color_manual(values=c("Black", "Red"))+ 
+  theme_bw()+
+  theme(legend.position = "none")
+```
+
+```{r}
+scatterinfobs<-function(data, xy=TRUE, cooksd=0.5, ...){
+model<-lm(data[[2]]~data[[1]],...)
+summary(model)
+}
+```
+
+
+```{r}
+test<-gapminder %>% 
+  select(pop,gdpPercap)
+```
+
+
+```{r}
+model<-lm(test[[2]]~test[[1]])
+```
+
+```{r}
+test %>% 
+  mutate(Infob=cooks.distance(model)>0.01
+  ) %>% 
+  ggplot(aes(pop,gdpPercap))+
+  geom_point(aes(color=Infob))+
+  geom_smooth(method=lm, se=FALSE)+
+  scale_color_manual(values=c("Black", "Red"))+
+  theme_bw()+
+  theme(legend.position = "none")
+```
 
 <!---------------------------------------------------------->
 
@@ -138,86 +110,78 @@ FILL_THIS_IN
 
 ### 1.3 Test the Function (2 points)
 
-| Rubric | Description | Points |
-|--------|-------------|--------|
-| Choice | Your demonstrations aren't redundant; neither are the tests; selected inputs are useful to check | 2 |
-
-- [ ] Demonstrate the use of your function, using at least two non-redundant inputs. 
-- [ ] Write formal tests for your function. You should use at least three non-redundant uses of an `expect_()` function from the `testthat` package, and they should be contained in a `test_that()` function (or more than one). 
-
-Example of non-redundant inputs:
-
-- Vector with no NA's
-- Vector that has NA's
-- Vector of a different type (if relevant)
-- Vector of length 0, like `numeric(0)`.
-
-Example of redundant inputs:
-
-- Each providing a different number (unless one of these numbers have some significance, like a limit point -- just tell us if that's the case)
-
-
-
 <!------------ Test your function below here --------------->
+```{r}
+scatterinfobs(gapminder %>% 
+                select(lifeExp,pop))
+scatterinfobs(gapminder %>% 
+                select(pop,gdpPercap))
+```
 
+```{r}
+expect_error(scatterinfobs(data=gapminder %>% 
+                select(country,pop)))
+expect_error(scatterinfobs(data=gapminder %>% 
+                select(year,country,pop)))
+expect_error(scatterinfobs(data=FALSE))
+expect_error(scatterinfobs(data=gapminder %>% 
+                select(country,pop),cooksd = "0.5"))
+```
 
 <!---------------------------------------------------------->
-
-
-### 1.4 (**Optional**, 1 bonus point)
-
-Contribute to an open-source R package on GitHub by making an improvement to one of their functions, or perhaps even adding your function to their package. If you're nervous, maybe ask the developers first via a GitHub Issue or email (check their `CONTRIBUTING` file for more details, if they have one).
-
-Note: You can't get above 100% on this assignment.
-
-If you choose to do this, just put a link to the pull request that you made on the R package's GitHub repository. Your pull request doesn't need to be accepted by the developers, but your pull request _should_ be realistic in order to get this bonus point. 
-
-__You can even do this after you submit the assignment__. For example, you might want to wait until we learn about R packages before you do this. If this is the case, just make sure to let your grader know once you submit your pull request, via a GitHub Issue in your homework repository (don't forget to `@tag` them!), also including a link to your pull request. But, you have until the deadline of Assignment 5-B to do this, and you only get one attempt!
-
-
-
+-------
 
 ## Exercise 2: List Columns (8 points)
 
-### 2.1 (8 points)
-
-| Rubric | Description | Points |
-|--------|-------------|--------|
-| First map | First `purrr` mapping function was used correctly | 2 |
-| Second map | Second `purrr` mapping function was used correctly | 2 |
-| (Un)nesting | Was done appropriately | 2 |
-| Explanation | What was claimed to be calculated was indeed calculated | 2 |
-
-For this exercise, you'll be evaluating a model that's fit separately for each group in some dataset.
-
-Examples:
-
-- Maybe your model is a linear model (using `lm()`) for each continent in the `gapminder::gapminder` dataset.
-- Maybe your model is a distribution of a single variable (using the [`distplyr` package](https://distplyr.netlify.app/)) for each penguin in the `palmerpenguins::penguins` dataset.
-
-Your tasks are as follows.
-
-1. [ ] Make a column of model objects. Do this using the appropriate mapping function from the `purrr` package.  Note: it's possible you'll have to make use of nesting, here. 
-    - For `distplyr`, use a `distplyr::dst_*()` function of your choosing, like `dst_norm()` or `dst_step()`. Note that there aren't that many `dst_*()` functions yet, sorry -- `distplyr` is still quite young.
-2. [ ] Evaluate the model in a way that interests you. But, you should evaluate something other than a single number for each group. Hint: you'll need to use another `purrr` mapping function again.
-    - For `distplyr`, use a distributional representation of your choosing, such as quantiles, using the appropriate `distplyr::enframe_*()` function.
-3. [ ] Print out the tibble so far. 
-4. [ ] Unnest the resulting calculations, and print your final tibble to screen. Make sure your tibble makes sense: column names are appropriate, and you've gotten rid of columns that no longer make sense. 
-5. [ ] Don't just blindly do this exercise: in 1-2 brief sentences, tell us what you've just calculated, and in what column. 
-
-
-
+### 2.1 (8 points) 
 <!------------ Put your work here -------------------------->
+Check Gapminder Dataset
+```{r}
+head(gapminder)
+```
 
-
-
+1. Create linear regression model column for each continent, to regress lifeExp and pop on gdpPercap
+```{r}
+(gdpmodelPerContinent<-gapminder %>% 
+  select(continent,lifeExp,pop,gdpPercap) %>% 
+  nest(data=c(lifeExp,pop,gdpPercap)) %>% 
+  mutate(model= map(data, ~{
+    lm(gdpPercap~lifeExp+pop,data = .x)
+  })))
+  
+```
+2. Evaluate the model by getting the linear model coefficient into its seprate column
+```{r}
+gdpCoef<-gdpmodelPerContinent %>% 
+  mutate(coef= map(model, tidy))
+```
+3. Print out the tibble so far.
+```{r}
+gdpCoef
+```
+4. Unnest the coef column, and only keep relevant columns and the statistically significant (p-value less than 0.05) non-intercept terms.
+```{r}
+gdpCoef %>% 
+  unnest(coef) %>% 
+  select(continent,model,term,p.value) %>% 
+  filter(p.value<0.05) %>% 
+  filter(term!="(Intercept)") 
+```
+5.Brief explaination:
+The final tibble in 4 shows the linear regression model (in the model column) result that regress lifeExp(life expectancy) and pop(population) on gdpPercap (GDP per capita) per continent. The final tibble only kept statistically significant (p-value less than 0.05 in p.value column) non-intercept terms(in the term column).
 <!---------------------------------------------------------->
 
 
 ### 2.2 (**Optional**, 1 bonus point)
 
-Choose one of the following. Following a linear model fit to groups on the gapminder dataset, either:
-
-- Find countries with interesting stories. Sudden, substantial departures from the temporal trend is interesting. How could you operationalize this notion of "interesting"?
-- Use the residuals to detect countries where your model is a terrible fit. Examples: Are there 1 or more freakishly large residuals, in an absolute sense or relative to some estimate of background variability? Are there strong patterns in the sign of the residuals? E.g., all positive, then all negative, then positive again.
-- Fit a regression using ordinary least squares and a robust technique. Determine the difference in estimated parameters under the two approaches. If it is large, consider that country "interesting".
+Here, we still fit the model in the previous part, which regress lifeExp(life expectancy) and pop(population) on gdpPercap (GDP per capita). From the cook's distance plot, we can identify that record 853,854,857 are infuenltial observations. After looking up, those records belong to Kuwait.
+Kuwait is an interesting country in this case because althought it is not the country with highest life expectancy or population, it has the highest GDP per capita, in fact, more than twice for any other countries in the gapminder dataset.
+```{r}
+model<-lm(gdpPercap~lifeExp+pop,data=gapminder)
+plot(model)
+gapminder[c(853,854,857),]
+gapminder %>% 
+  group_by(country) %>% 
+  summarise(lifeExp=mean(lifeExp),pop=mean(pop),gdpPercap=mean(gdpPercap)) %>% 
+  arrange(desc(gdpPercap))
+```
