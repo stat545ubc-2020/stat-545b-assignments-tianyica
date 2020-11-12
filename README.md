@@ -14,7 +14,7 @@ This Project is a repository for assignment deliverables in [__STAT 545B__](http
 ## How to run code that appears in the folder / GitHub repository?
 There are serveral ways for running the code in this repository.
 If you only want to serveral sepecific lines of code, it might be eaiser to copy the text and paste into whatever Integrated Development Environment you prefer.
-Otherwise, you can clone or download this project as shown below.
+Otherwise, you can clone or download this project.
 
 
 
