@@ -11,96 +11,204 @@ library(testthat)
 library(broom)
 ```
 
-Exercise 1: Functions (10 points)
----------------------------------
+## Exercise 1: Functions (10 points)
 
 ### 1.1 Documentation and Design (5)
 
 <!----------- Documentation goes here ---------------------->
+
 **Description**
 
-This function takes a dataset of two quantitative variables and fits a single linear regression model from the them,then it displays scatterplot with fitted regression line. Also, it displays any influential points as color red based on user defined critiria (cut-off for cook's distance).
+This function takes a dataset(as a list, and dataframes/tibbles are
+lists) of two quantitative variables and fits a single linear regression
+model from them, then it displays a scatterplot with fitted regression
+line. Also, it displays any influential points as red color based on
+user defined criteria (cut-off for cook’s distance).
 
 **Input (Arguments)**
 
--   `data`: a dataframe with two quantitative variables.
--   *Justification*: Data means the data that would be used to fit the model and made the plot. There is no default value of data.
--   `xy`: logicals. If TRUE then the first column of the dataframe would assumed to be independent variable, and vice versa for FALSE. The default if TRUE.
--   *Justification*: xy means the first column is the independent variable in the regression model, and the second column is the dependent variable. The default is TRUE, which only indicate one of the two possibilties.
--   `cooksd`: a non-negative numercial value for cook's distance threshold. The default is 0.5.
--   *Justification*: Cooksd means the Cook's Distance for identifying influential observations. Emprically, a cook's distance above 0.5 would need to be examine, so the default is 0.5.
--   `na.action`: a function which indicates what should happen when the data contain NAs. The default is set by the na.action setting of options, and is na.fail if that is unset.
--   *Justification*: Na.action means default actions for NA values, and the setting is na.fail as what is in options.
--   `...`: additional arguments to be passed to the low level regression fitting functions.
--   *Justification*: The ellipsis allows for more generalizability.
+  - `data`: a list (dataframe, tibble, etc…) with two quantitative
+    variables.
+      - *Justification*: Data means the data that would be used to fit
+        the model and made the plot. There is no default value of data.
+  - `xy`: logicals. If TRUE then the first column of the list would
+    assumed to be the independent variable, and vice versa for FALSE.
+    The default if TRUE.
+      - *Justification*: xy means the first column is the independent
+        variable (x) in the regression model, and the second column is
+        the dependent variable (y). The default is TRUE, which is
+        consistent with ‘xy’.
+  - `cooksd`: a non-negative numerical value for cook’s distance
+    threshold. The default is 0.5.
+      - *Justification*: Cooksd means the Cook’s Distance for
+        identifying influential observations. Empirically, a cook’s
+        distance above 0.5 would need to be examined, so the default is
+        0.5.
+  - `outputcount`: logicals. If TRUE then print a message on the count
+    of influential observations.
+      - *Justification*: Outputcount means print out the count of
+        influential observations, and it is safer to not printing when
+        user did not specify.
+  - `verbose`: logicals. If TRUE then print a message to inform the user
+    that the process is running.
+      - *Justification*: Verbose is a widely accepted terminology for
+        including message feedback, and it is safer to not include when
+        user did not specify.
+  - `...`: additional arguments to be passed to the low level regression
+    fitting functions.
+      - *Justification*: The ellipsis allows for more generalizability.
 
 **Output**
 
-A scatterplot with fitted regression line, and red labelled influential points.
+A ggplot object(scatterplot) with fitted regression line and red
+labelled influential points.
+
+  - *Justification*: The purpose of this function is to create a data
+    visualization to indicate influential observations in linear
+    bivariate analysis.
 
 <!---------------------------------------------------------->
+
 ### 1.2 Write the Function (3)
 
 <!------------ Write your function below here -------------->
+
+Error Messages Justification: Data needs to be a list of two
+quantitative variables in order to fit linear regression model and
+create scatter plot. Xy needs a non-negative number, and
+cooksd,outputcount,verbose needs to be boolean. The process would not
+make sense with unexpected inputs, therefore it should stop.
+
+``` r
+scatterinfobs<-function(data, xy=TRUE, cooksd=0.5, outputcount=FALSE, verbose=FALSE,...){
+  if(typeof(data)!="list"){
+    stop('The function expect input data as list\n',
+         'but the input is: ', typeof(data)[1])
+  }
+  if(ncol(data)!=2){
+    stop('The function expect two columns\n',
+         'but the input has: ', ncol(data))
+  }
+  if(!is.numeric(data[[1]])|!is.numeric(data[[2]])){
+    stop('The function expect quantinative/numberic variables.')
+  }
+  if(!is.numeric(cooksd)|cooksd<0){
+    stop('cooksd needs to be a non-negative number')
+  }
+  if(!is.logical(xy)){
+    stop('xy needs to be a boolean value')
+  }
+  if(!is.logical(outputcount)){
+    stop('outputcount needs to be a boolean value')
+  }
+  if(!is.logical(verbose)){
+    stop('verbose needs to be a boolean value')
+  }  
+  if(xy==TRUE){
+    x=data[[1]]
+    y=data[[2]]
+    xname=colnames(data)[1]
+    yname=colnames(data)[2]
+   
+  }
+  if(xy==FALSE){
+    x=data[[2]]
+    y=data[[1]]
+    xname=colnames(data)[2]
+    yname=colnames(data)[1]
+   
+  }
+ model<-lm(y~x,...)
+ if(verbose==TRUE){
+   cat("Linear model fitting done, now creating plot...")
+ }
+ 
+ if(outputcount==TRUE){
+   Infobvec<-as.vector(cooks.distance(model)>cooksd)
+   Infobnum<-length(subset(Infobvec,Infobvec==TRUE))
+   cat("We have",Infobnum,"influential observations","at",cooksd,"cook's distance threshold")
+ }
+data %>% 
+  mutate(Infob=cooks.distance(model)>cooksd) %>% 
+  ggplot(aes(x,y))+
+  geom_point(aes(color=Infob))+
+  geom_smooth(method=lm, se=FALSE)+
+  scale_color_manual(values=c("Black", "Red"))+ 
+  theme_bw()+
+  labs(x=xname,y=yname)+
+  theme(legend.position = "none")
+}
+```
+
 <!---------------------------------------------------------->
+
 ### 1.3 Test the Function (2 points)
 
-<table style="width:44%;">
-<colgroup>
-<col width="12%" />
-<col width="19%" />
-<col width="12%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Rubric</th>
-<th>Description</th>
-<th>Points</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Choice</td>
-<td>Your demonstrations aren't redundant; neither are the tests; selected inputs are useful to check</td>
-<td>2</td>
-</tr>
-</tbody>
-</table>
-
--   \[ \] Demonstrate the use of your function, using at least two non-redundant inputs.
--   \[ \] Write formal tests for your function. You should use at least three non-redundant uses of an `expect_()` function from the `testthat` package, and they should be contained in a `test_that()` function (or more than one).
-
-Example of non-redundant inputs:
-
--   Vector with no NA's
--   Vector that has NA's
--   Vector of a different type (if relevant)
--   Vector of length 0, like `numeric(0)`.
-
-Example of redundant inputs:
-
--   Each providing a different number (unless one of these numbers have some significance, like a limit point -- just tell us if that's the case)
-
 <!------------ Test your function below here --------------->
+
+``` r
+scatterinfobs(gapminder %>% 
+                select(lifeExp,pop))
+```
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](assignment-1B_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+scatterinfobs(gapminder %>% 
+                select(pop,lifeExp),xy=FALSE,cooksd=0.05,verbose = TRUE,outputcount = TRUE)
+```
+
+    ## Linear model fitting done, now creating plot...We have 4 influential observations at 0.05 cook's distance threshold
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](assignment-1B_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+
+``` r
+scatterinfobs(gapminder %>% 
+                select(lifeExp,gdpPercap),cooksd = 0.05)
+```
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](assignment-1B_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
+
+``` r
+test_that("Unexpected Input Testing",{
+expect_error(scatterinfobs(data=gapminder %>% 
+                select(country,pop)))
+expect_error(scatterinfobs(data=gapminder %>% 
+                select(gdpPercap,pop),xy=1))
+expect_error(scatterinfobs(data=gapminder %>% 
+                select(gdpPercap,pop),verbose ="TRUE"))
+expect_error(scatterinfobs(data=gapminder %>% 
+                select(gdpPercap,pop),outputcount = 0))
+expect_error(scatterinfobs(data=gapminder %>% 
+                select(year,country,pop)))
+expect_error(scatterinfobs(data=FALSE))
+expect_error(scatterinfobs(data=gapminder %>% 
+                select(gdpPercap,pop),cooksd = "0.5"))
+  
+})
+
+test_that("Output check",{
+expect_equal(class(scatterinfobs(data=gapminder %>% 
+                select(gdpPercap,pop))),c("gg","ggplot"))
+expect_output(scatterinfobs(data=gapminder %>% 
+                select(gdpPercap,pop),outputcount = TRUE))
+})
+```
+
 <!---------------------------------------------------------->
-### 1.4 (**Optional**, 1 bonus point)
 
-Contribute to an open-source R package on GitHub by making an improvement to one of their functions, or perhaps even adding your function to their package. If you're nervous, maybe ask the developers first via a GitHub Issue or email (check their `CONTRIBUTING` file for more details, if they have one).
-
-Note: You can't get above 100% on this assignment.
-
-If you choose to do this, just put a link to the pull request that you made on the R package's GitHub repository. Your pull request doesn't need to be accepted by the developers, but your pull request *should* be realistic in order to get this bonus point.
-
-**You can even do this after you submit the assignment**. For example, you might want to wait until we learn about R packages before you do this. If this is the case, just make sure to let your grader know once you submit your pull request, via a GitHub Issue in your homework repository (don't forget to `@tag` them!), also including a link to your pull request. But, you have until the deadline of Assignment 5-B to do this, and you only get one attempt!
-
-------------------------------------------------------------------------
-
-Exercise 2: List Columns (8 points)
------------------------------------
+## Exercise 2: List Columns (8 points)
 
 ### 2.1 (8 points)
 
 <!------------ Put your work here -------------------------->
+
 Check Gapminder Dataset
 
 ``` r
@@ -117,7 +225,10 @@ head(gapminder)
     ## 5 Afghanistan Asia       1972    36.1 13079460      740.
     ## 6 Afghanistan Asia       1977    38.4 14880372      786.
 
-1.  Create linear regression model column for each continent, to regress lifeExp and pop on gdpPercap
+1.  Create linear regression model column for each continent, to regress
+    lifeExp and pop on gdpPercap
+
+<!-- end list -->
 
 ``` r
 (gdpmodelPerContinent<-gapminder %>% 
@@ -137,14 +248,19 @@ head(gapminder)
     ## 4 Americas  <tibble [300 x 3]> <lm>  
     ## 5 Oceania   <tibble [24 x 3]>  <lm>
 
-1.  Evaluate the model by getting the linear model coefficient into its seprate column
+2.  Evaluate the model by getting the linear model coefficient into its
+    separate column
+
+<!-- end list -->
 
 ``` r
 gdpCoef<-gdpmodelPerContinent %>% 
   mutate(coef= map(model, tidy))
 ```
 
-1.  Print out the tibble so far.
+3.  Print out the tibble so far.
+
+<!-- end list -->
 
 ``` r
 gdpCoef
@@ -159,7 +275,11 @@ gdpCoef
     ## 4 Americas  <tibble [300 x 3]> <lm>   <tibble [3 x 5]>
     ## 5 Oceania   <tibble [24 x 3]>  <lm>   <tibble [3 x 5]>
 
-1.  Unnest the coef column, and only keep relevant columns and the statistically significant (p-value less than 0.05) non-intercept terms.
+4.  Unnest the coef column, and only keep relevant columns and the
+    statistically significant (p-value less than 0.05) non-intercept
+    terms.
+
+<!-- end list -->
 
 ``` r
 gdpCoef %>% 
@@ -182,18 +302,30 @@ gdpCoef %>%
     ## 8 Oceania   <lm>   lifeExp 5.32e-13
     ## 9 Oceania   <lm>   pop     1.87e- 3
 
-5.Brief explaination: The final tibble in 4 shows the linear regression model (in the model column) result that regress lifeExp(life expectancy) and pop(population) on gdpPercap (GDP per capita) per continent. The final tibble only kept statistically significant (p-value less than 0.05 in p.value column) non-intercept terms(in the term column). <!---------------------------------------------------------->
+5.Brief explanation: The final tibble in 4 shows the linear regression
+model (in the model column) result that regress lifeExp(life expectancy)
+and pop(population) on gdpPercap (GDP per capita) per continent. The
+final tibble only kept statistically significant (p-value less than 0.05
+in p.value column) non-intercept terms (in the term column).
+<!---------------------------------------------------------->
 
 ### 2.2 (**Optional**, 1 bonus point)
 
-Here, we still fit the model in the previous part, which regress lifeExp(life expectancy) and pop(population) on gdpPercap (GDP per capita). From the cook's distance plot, we can identify that record 853,854,857 are infuenltial observations. After looking up, those records belong to Kuwait. Kuwait is an interesting country in this case because althought it is not the country with highest life expectancy or population, it has the highest GDP per capita, in fact, more than twice for any other countries in the gapminder dataset.
+Here, we still fit the model in the previous part, which regress
+lifeExp(life expectancy) and pop(population) on gdpPercap (GDP per
+capita). From the cook’s distance plot, we can identify that record
+853,854,857 are influential observations. After looking up, those
+records belong to Kuwait. Kuwait is an interesting country in this case
+because although it is not the country with highest life expectancy or
+population, it has the highest GDP per capita, in fact, more than twice
+for any other countries in the gapminder dataset.
 
 ``` r
 model<-lm(gdpPercap~lifeExp+pop,data=gapminder)
 plot(model)
 ```
 
-![](assignment-1B_files/figure-markdown_github/unnamed-chunk-7-1.png)![](assignment-1B_files/figure-markdown_github/unnamed-chunk-7-2.png)![](assignment-1B_files/figure-markdown_github/unnamed-chunk-7-3.png)![](assignment-1B_files/figure-markdown_github/unnamed-chunk-7-4.png)
+![](assignment-1B_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->![](assignment-1B_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->![](assignment-1B_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->![](assignment-1B_files/figure-gfm/unnamed-chunk-10-4.png)<!-- -->
 
 ``` r
 gapminder[c(853,854,857),]
