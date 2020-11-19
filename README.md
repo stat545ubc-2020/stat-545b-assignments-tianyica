@@ -16,5 +16,8 @@ There are serveral ways for running the code in this repository.
 If you only want to serveral sepecific lines of code, it might be eaiser to copy the text and paste into whatever Integrated Development Environment you prefer.
 Otherwise, you can clone or download this project.
 
+## Note
+The function in Assignment-1b has been wrapped into the [__scatterwithoutlier__](https://github.com/tianyica/scatterwithoutlier/tree/main) package, which creates scatterplot for two quantitative variables with labeled outliers.
+
 
 
