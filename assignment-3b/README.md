@@ -1,16 +1,20 @@
-## Welcome to your Assignment 3B!
+## Assignment 3B Note
 
-You may modify this README accordingly to the instructions from assignment 3B, *including* modifying the title of the README to be the name of your app instead of the current "Welcome to your Assignment 3B!".
++ This repo implements Option A from the assignment-3b.
 
-A reminder of what your README must include:
++ This repo add 3 features to the [Basic BC Liquor app](https://github.com/daattali/shiny-server/tree/master/bcl) created by by [Dean Attali](deanattali.com).
 
-+  Your choice of assignment clearly stated: Option A - BC Liquor app, or Option B - your own Shiny app.
-+  A description of your app. In the case of Option A, write about what makes your app different from the "basic" version after implementing your chosen features.
-+ A link to the URL where the app is hosted.
-+ Whatever dataset you will use, acknowledge its source clearly. Remember that we value open, reproducible science: this means that the user of your app should have direct access to the data, or know where to go to access it.
++ This [Bcl Shiny App](https://tianyizheng.shinyapps.io/bcl-shiny/) has provided an interactive application that allows users to query, filter and visualize  . 
+  Specifically, when comparing with the original version of BCL shiny app, this version has added:
+   - Major Features:
+     1. Added functional widget to filter by sweetness level: sweetness filter allows users to interact with the two plots and table by choosing the sweetness level they want.
+     2. Added functional widget on searching by product name: Although users can search in the data table from the basic version, the plots does not interact with the input, and the new search bar added this functionality, where users can enter words (like "mission hill") and query the available sweetness and alcohol content options.
+     3. Added scatter plot on Sweetness v.s . Alcohol Content: This plot allows users to query and visualize the available sweetness and alcohol content levels from the current option.
+   - Minor Features: Added the indication phrase on lowest available product price: This allows users to know the cheapest option immediately, without sorting the data table.
+   - Minor Edits: Added personal github link and a reference to the assignment repo.
 
-When you edit this README - if you decide to do **Option A** for your assignment - make sure to include the following acknowledgement:
++ The BCL Shiny App is now running at [shinyapps.io](https://tianyizheng.shinyapps.io/bcl-shiny/).
 
-+ The BC Liquor app was created by [Dean Attali](deanattali.com), and was copied into the folder "BCL-Shiny" in this repo from Dean's [bcl folder](https://github.com/daattali/shiny-server/tree/master/bcl) in his [shiny-server](https://github.com/daattali/shiny-server) repo.
++ The BC Liquor app was originally created by [Dean Attali](deanattali.com), and was copied into the folder "BCL-Shiny" in this repo from Dean's [bcl folder](https://github.com/daattali/shiny-server/tree/master/bcl) in his [shiny-server](https://github.com/daattali/shiny-server) repo.
 
-*Remember to also update your main README to include a link to a running instance of your Shiny app.* 
+
