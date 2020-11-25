@@ -1,6 +1,6 @@
 library(shiny)
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
+options(shiny.autoreload = TRUE)
 
 # YOU CAN IGNORE THIS: metadata for when sharing the app on facebook/twitter
 share <- list(
@@ -61,25 +61,33 @@ ui <- fluidPage(
       h4(
         "Had a long day?  This app will help you find the right drink for tonight! Just use the filters below..."
       ),
-      br(),
+      #img(src = "blcLOGO.jpg", height="50%", width="85%", align="left"),
+      #br(), br(), br(), br(), br(), br(), br(),
       sliderInput("priceInput", "Price", 0, 100, c(25, 40), pre = "$"),
+      radioButtons("sweetnessChoice", label = "Select sweetness", choices = c("All", "High (7-10)", "Medium (4-6)", "Low (0-3)")),
       uiOutput("typeSelectOutput"),
       checkboxInput("filterCountry", "Filter by country", FALSE),
+      textInput("searchName", "Search by product name (try to type a word)"),
       conditionalPanel(
         condition = "input.filterCountry",
         uiOutput("countrySelectorOutput")
       ),
       hr(),
       span("Data source:", 
-        tags$a("OpenDataBC",
-             href = "https://www.opendatabc.ca/dataset/bc-liquor-store-product-price-list-current-prices")),
+           tags$a("OpenDataBC",
+                  href = "https://www.opendatabc.ca/dataset/bc-liquor-store-product-price-list-current-prices")),
       br(),
-      span("Learn how to build this app", a(href = "http://deanattali.com/blog/building-shiny-apps-tutorial/", "with my Shiny tutorial")),
+      span("Learn how to build this app", a(href = "http://deanattali.com/blog/building-shiny-apps-tutorial/", "with Shiny tutorial")),
       br(), br(),
       em(
-        span("Created by", a(href = "http://deanattali.com", "Dean Attali")),
         HTML("&bull;"),
-        span("Code", a(href = "https://github.com/daattali/shiny-server/tree/master/bcl", "on GitHub"))
+        span("Originally Created by", a(href = "http://deanattali.com", "Dean Attali")),
+        br(),
+        HTML("&bull;"),
+        span("Edited by", a(href = "https://github.com/tianyica", "Tianyi Zheng")),
+        br(),
+        HTML("&bull;"),
+        span("Code", a(href = "https://github.com/stat545ubc-2020/stat-545b-assignments-tianyica/tree/master/assignment-3b", "on GitHub"))
       )
     ),
     mainPanel(
@@ -88,8 +96,10 @@ ui <- fluidPage(
       br(),
       plotOutput("plot"),
       br(), br(),
-      #tableOutput("prices")
-      DT::dataTableOutput("prices")
+      plotOutput("splot"),
+      br(), br(),
+      #tableOutput("filtered")
+      DT::dataTableOutput("filtered")
     )
   )
 )
@@ -107,47 +117,81 @@ server <- function(input, output, session) {
                 multiple = TRUE,
                 selected = c("BEER", "WINE"))
   })
-  
+   
   output$summaryText <- renderText({
-    numOptions <- nrow(prices())
+    numOptions <- nrow(filtered())
+    startfrom<- min(filtered()$Price)
     if (is.null(numOptions)) {
       numOptions <- 0
     }
-    paste0("We found ", numOptions, " options for you")
+    paste0("We found ", numOptions, " options for you", " starting from $", startfrom)
   })
   
-  prices <- reactive({
-    prices <- bcl
+  filtered <- reactive({
+    filtered <- bcl
     
     if (is.null(input$countryInput)) {
       return(NULL)
     }
     
-    prices <- dplyr::filter(prices, Type %in% input$typeInput)
+    filtered <- dplyr::filter(filtered, Type %in% input$typeInput)
     if (input$filterCountry) {
-      prices <- dplyr::filter(prices, Country == input$countryInput)
+      filtered <- dplyr::filter(filtered, Country == input$countryInput)
     }
-    prices <- dplyr::filter(prices, Price >= input$priceInput[1],
+    filtered <- dplyr::filter(filtered, Price >= input$priceInput[1],
                             Price <= input$priceInput[2])
+    if (input$sweetnessChoice=="Low (0-3)") {
+      filtered <- dplyr::filter(filtered, Sweetness >= 0,
+                              Sweetness <= 3)
+    }
+    if (input$sweetnessChoice=="Medium (4-6)") {
+      filtered <- dplyr::filter(filtered, Sweetness >= 4,
+                              Sweetness <= 6)
+    }
+    if (input$sweetnessChoice=="High (7-10)") {
+      filtered <- dplyr::filter(filtered, Sweetness >= 7,
+                              Sweetness <= 10)
+    }
+    if (input$sweetnessChoice=="All") {
+      filtered
+    }
     
-    if(nrow(prices) == 0) {
+    if (!is.null(input$searchName)) {
+      filtered <- dplyr::filter(filtered, grepl(toupper(input$searchName),Name))
+    }
+    
+    if(nrow(filtered) == 0) {
       return(NULL)
     }
-    prices
+    filtered
   })
   
   output$plot <- renderPlot({
-    if (is.null(prices())) {
+    if (is.null(filtered())) {
       return(NULL)
     }
     
-    ggplot(prices(), aes(Alcohol_Content, fill = Type)) +
+    ggplot(filtered(), aes(Alcohol_Content, fill = Type)) +
       geom_histogram(colour = "black") +
       theme_classic(20)
   })
   
-  output$prices <- DT::renderDataTable({
-    prices()
+  output$filtered <- DT::renderDataTable({
+    filtered()
+  })
+  
+  output$splot <- renderPlot({
+    if (is.null(filtered())) {
+      return(NULL)
+    }
+    
+    ggplot(filtered(), aes(Alcohol_Content, Sweetness, fill = Type, color = Type)) +
+      geom_point() +
+      theme_classic(20)
+  })
+  
+  output$filtered <- DT::renderDataTable({
+    filtered()
   })
   
   output$download <- downloadHandler(
@@ -155,7 +199,7 @@ server <- function(input, output, session) {
       "bcl-results.csv"
     },
     content = function(con) {
-      write.csv(prices(), con)
+      write.csv(filtered(), con)
     }
   )
 }
