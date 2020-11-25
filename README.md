@@ -10,6 +10,9 @@ This Project is a repository for assignment deliverables in [__STAT 545B__](http
 [x] assignment-1b:
     assignment-1B.Rmd - Deliverable for assignment 1.
 
+[x] assignment-3b:
+    [__shiny app__](https://tianyizheng.shinyapps.io/bcl-shiny/ ) - Deliverable for assignment 3.
+
 
 ## How to run code that appears in the folder / GitHub repository?
 There are serveral ways for running the code in this repository.
