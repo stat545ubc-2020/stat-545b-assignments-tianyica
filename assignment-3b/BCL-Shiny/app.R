@@ -61,8 +61,6 @@ ui <- fluidPage(
       h4(
         "Had a long day?  This app will help you find the right drink for tonight! Just use the filters below..."
       ),
-      #img(src = "blcLOGO.jpg", height="50%", width="85%", align="left"),
-      #br(), br(), br(), br(), br(), br(), br(),
       sliderInput("priceInput", "Price", 0, 100, c(25, 40), pre = "$"),
       radioButtons("sweetnessChoice", label = "Select sweetness", choices = c("All", "High (7-10)", "Medium (4-6)", "Low (0-3)")),
       uiOutput("typeSelectOutput"),
@@ -87,7 +85,9 @@ ui <- fluidPage(
         span("Edited by", a(href = "https://github.com/tianyica", "Tianyi Zheng")),
         br(),
         HTML("&bull;"),
-        span("Code", a(href = "https://github.com/stat545ubc-2020/stat-545b-assignments-tianyica/tree/master/assignment-3b", "on GitHub"))
+        span("Code", a(href = "https://github.com/stat545ubc-2020/stat-545b-assignments-tianyica/tree/master/assignment-3b", "on GitHub")),
+        br(), br(),
+        img(src = "blcLOGO.jpg", height="50%", width="85%", align="center")
       )
     ),
     mainPanel(
@@ -173,6 +173,7 @@ server <- function(input, output, session) {
     
     ggplot(filtered(), aes(Alcohol_Content, fill = Type)) +
       geom_histogram(colour = "black") +
+      ggtitle("This plot displays the distribution on alcohol content for filtered drinks") +
       theme_classic(20)
   })
   
@@ -186,7 +187,8 @@ server <- function(input, output, session) {
     }
     
     ggplot(filtered(), aes(Alcohol_Content, Sweetness, fill = Type, color = Type)) +
-      geom_point() +
+      geom_point(size=5, alpha=0.25) +
+      ggtitle("This plot displays the availbility in sweetness and alcohol content for filtered drinks") +
       theme_classic(20)
   })
   

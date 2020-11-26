@@ -1,0 +1,10 @@
+name: bcl-shiny
+title:
+username:
+account: tianyizheng
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3300412
+bundleId: 3904495
+url: https://tianyizheng.shinyapps.io/bcl-shiny/
+when: 1606309573.33803
