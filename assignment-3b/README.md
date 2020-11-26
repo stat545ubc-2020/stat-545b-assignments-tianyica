@@ -2,7 +2,7 @@
 
 + This repo implements Option A from the assignment-3b.
 
-+ This assignment adds 4 features to the [Basic BC Liquor app](https://github.com/daattali/shiny-server/tree/master/bcl) created by by [Dean Attali](deanattali.com).
++ This assignment adds 4 features to the [Basic BC Liquor app](https://github.com/daattali/shiny-server/tree/master/bcl) created by by [Dean Attali](https://deanattali.com).
 
 + This [BCL Shiny App](https://tianyizheng.shinyapps.io/bcl-shiny/) has provided an interactive application environment that allows users to query, filter and visualize Alcoholic drink at BC Liquor. 
   Specifically, when comparing with the [original version](https://github.com/daattali/shiny-server) of BCL shiny app, this version has added:
@@ -18,6 +18,6 @@
 
 + The BCL Shiny App is now running at [shinyapps.io](https://tianyizheng.shinyapps.io/bcl-shiny/).
 
-+ The BC Liquor app was originally created by [Dean Attali](deanattali.com), and was copied into the folder "BCL-Shiny" in this repo from Dean's [bcl folder](https://github.com/daattali/shiny-server/tree/master/bcl) in his [shiny-server](https://github.com/daattali/shiny-server) repo.
++ The BC Liquor app was originally created by [Dean Attali](https://deanattali.com), and was copied into the folder "BCL-Shiny" in this repo from Dean's [bcl folder](https://github.com/daattali/shiny-server/tree/master/bcl) in his [shiny-server](https://github.com/daattali/shiny-server) repo.
 
 
