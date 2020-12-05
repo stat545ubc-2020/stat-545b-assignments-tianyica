@@ -12,6 +12,11 @@ This Project is a repository for assignment deliverables in [__STAT 545B__](http
 
 [x] assignment-3b:
     [__shiny app__](https://tianyizheng.shinyapps.io/bcl-shiny/ ) - Deliverable for assignment 3.
+ 
+[x] assignment-4b:
+    [__make pipeline__](https://github.com/stat545ubc-2020/stat-545b-assignments-tianyica/tree/master/assignment-4b/make-activity) - Deliverable for assignment 4.
+ 
+[ ] assignment-5b:
 
 
 ## How to run code that appears in the folder / GitHub repository?
@@ -21,6 +26,13 @@ Otherwise, you can clone or download this project.
 
 ## BCL Shiny App 
 The BCL Shiny App from assignment 3 has now been deployed at https://tianyizheng.shinyapps.io/bcl-shiny/ 
+
+## Dependencies required for each assignment
+assignment-1b: Requires packages: tidyverse, gapminder, testthat, broom.
+
+assignment-3b: Requires packages: shiny, tidyverse
+
+assignment-4b: Requires a command-line environment to interact with [__make pipeline__](https://github.com/stat545ubc-2020/stat-545b-assignments-tianyica/tree/master/assignment-4b/make-activity). It can be Rstudio, Terminal, anaconda, etc...
 
 ## Note
 The function in Assignment-1b has been wrapped into the [__scatterwithoutlier__](https://github.com/tianyica/scatterwithoutlier/tree/main) package, which creates scatterplot for two quantitative variables with labeled outliers.
