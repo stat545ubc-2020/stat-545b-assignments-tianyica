@@ -8,7 +8,7 @@ Loading required package: shiny
 [31mx[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
 [31mx[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
 
-Listening on http://127.0.0.1:5598
+Listening on http://127.0.0.1:6310
 Warning in min(filtered()$Price) :
   no non-missing arguments to min; returning Inf
 `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
