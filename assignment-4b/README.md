@@ -25,4 +25,8 @@ nohup Rscript script.R > log.out 2>&1 &
 - The final `&` frees up your terminal 
 
 
+Graph for makefile:
+![makefile](https://github.com/stat545ubc-2020/stat-545b-assignments-tianyica/blob/master/assignment-4b/make-activity/makefile.PNG)
+
+
 Attribution: The original Make activity was put together by Jenny Bryan's STAT 545 team before 2017, with the associated content available in [stat545.com Chapter 36: Automating Data Analysis Pipelines](https://stat545.com/automating-pipeline.html).
