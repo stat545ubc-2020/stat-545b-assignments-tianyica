@@ -1,6 +1,6 @@
 ---
 title: "English Word lengths"
-author: "Jenny Bryan"
+author: "Tianyi Zheng"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
@@ -17,6 +17,9 @@ I computed the length of each word, i.e. the number of characters, and tabulated
 
 The most frequent word length is `r with(hist_dat, Length[which.max(Freq)])`.
 
-Here is a histogram of word lengths.
+Here are histograms (discrete and continuous) of word lengths.
+
 
 ![*Fig. 1* A histogram of English word lengths](histogram.png)
+
+![*Fig. 2* A smooth histogram of English word lengths](histogram_line.png)

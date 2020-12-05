@@ -242,11 +242,11 @@ head(gapminder)
     ## # A tibble: 5 x 3
     ##   continent data               model 
     ##   <fct>     <list>             <list>
-    ## 1 Asia      <tibble [396 x 3]> <lm>  
-    ## 2 Europe    <tibble [360 x 3]> <lm>  
-    ## 3 Africa    <tibble [624 x 3]> <lm>  
-    ## 4 Americas  <tibble [300 x 3]> <lm>  
-    ## 5 Oceania   <tibble [24 x 3]>  <lm>
+    ## 1 Asia      <tibble [396 × 3]> <lm>  
+    ## 2 Europe    <tibble [360 × 3]> <lm>  
+    ## 3 Africa    <tibble [624 × 3]> <lm>  
+    ## 4 Americas  <tibble [300 × 3]> <lm>  
+    ## 5 Oceania   <tibble [24 × 3]>  <lm>
 
 2.  Evaluate the model by getting the linear model coefficient into its
     separate column
@@ -269,11 +269,11 @@ gdpCoef
     ## # A tibble: 5 x 4
     ##   continent data               model  coef            
     ##   <fct>     <list>             <list> <list>          
-    ## 1 Asia      <tibble [396 x 3]> <lm>   <tibble [3 x 5]>
-    ## 2 Europe    <tibble [360 x 3]> <lm>   <tibble [3 x 5]>
-    ## 3 Africa    <tibble [624 x 3]> <lm>   <tibble [3 x 5]>
-    ## 4 Americas  <tibble [300 x 3]> <lm>   <tibble [3 x 5]>
-    ## 5 Oceania   <tibble [24 x 3]>  <lm>   <tibble [3 x 5]>
+    ## 1 Asia      <tibble [396 × 3]> <lm>   <tibble [3 × 5]>
+    ## 2 Europe    <tibble [360 × 3]> <lm>   <tibble [3 × 5]>
+    ## 3 Africa    <tibble [624 × 3]> <lm>   <tibble [3 × 5]>
+    ## 4 Americas  <tibble [300 × 3]> <lm>   <tibble [3 × 5]>
+    ## 5 Oceania   <tibble [24 × 3]>  <lm>   <tibble [3 × 5]>
 
 4.  Unnest the coef column, and only keep relevant columns and the
     statistically significant (p-value less than 0.05) non-intercept
@@ -360,4 +360,4 @@ gapminder %>%
     ##  8 Germany          73.4  77547043.    20557.
     ##  9 Iceland          76.5    226978.    20531.
     ## 10 Austria          73.1   7583298.    20412.
-    ## # ... with 132 more rows
+    ## # … with 132 more rows

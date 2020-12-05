@@ -1,6 +1,11 @@
-# English Word lengths
-Jenny Bryan  
-`r format(Sys.time(), '%d %B, %Y')`  
+---
+title: "English Word lengths"
+author: "Tianyi Zheng"
+date: "04 December, 2020"
+output:
+  html_document:
+    keep_md: yes
+---
 
 
 
@@ -10,6 +15,9 @@ I computed the length of each word, i.e. the number of characters, and tabulated
 
 The most frequent word length is 9.
 
-Here is a histogram of word lengths.
+Here are histograms (discrete and continuous) of word lengths.
+
 
 ![*Fig. 1* A histogram of English word lengths](histogram.png)
+
+![*Fig. 2* A smooth histogram of English word lengths](histogram_line.png)

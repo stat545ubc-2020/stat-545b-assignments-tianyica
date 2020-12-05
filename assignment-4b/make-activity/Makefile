@@ -1,13 +1,17 @@
 all: report.html
 
 clean:
-	rm -f words.txt histogram.tsv histogram.png report.md report.html
+	rm -f words.txt histogram.tsv histogram.png histogram_line.png report.md report.html
 
-report.html: report.rmd histogram.tsv histogram.png
+report.html: report.rmd histogram.tsv histogram.png histogram_line.png
 	Rscript -e 'rmarkdown::render("$<")'
 
 histogram.png: histogram.tsv
 	Rscript -e 'library(ggplot2); qplot(Length, Freq, data=read.delim("$<")); ggsave("$@")'
+	rm Rplots.pdf
+	
+histogram_line.png: histogram.tsv
+	Rscript -e 'library(ggplot2); qplot(Length, Freq, data=read.delim("$<"),geom = c("line")); ggsave("$@")'
 	rm Rplots.pdf
 
 histogram.tsv: histogram.r words.txt
