@@ -13,10 +13,11 @@ As explained in more detail on the [__STAT 545__](https://stat545.stat.ubc.ca/no
 nohup Rscript script.R > log.out 2>&1 &
 ```
 
-[This R-Bloggers post](https://www.r-bloggers.com/2012/01/long-running-r-commands-unix-screen-nohup-and-r/) explains this command well, where:
+[This R-Bloggers post](https://www.r-bloggers.com/2012/01/long-running-r-commands-unix-screen-nohup-and-r/) has provided more detail, where:
 
 - `nohup` sends the code execution to the background.
 - `> log.out 2>&1` directs output and messages to `log.out`.
 - The final `&` frees up your terminal 
 
-+ The original Make activity was put together by Jenny Bryan's STAT 545 team before 2017, with the associated content available in [stat545.com Chapter 36: Automating Data Analysis Pipelines](https://stat545.com/automating-pipeline.html).
+
+The original Make activity was put together by Jenny Bryan's STAT 545 team before 2017, with the associated content available in [stat545.com Chapter 36: Automating Data Analysis Pipelines](https://stat545.com/automating-pipeline.html).
