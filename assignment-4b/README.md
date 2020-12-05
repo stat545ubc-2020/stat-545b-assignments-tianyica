@@ -1,9 +1,13 @@
-## STAT 545B Assignment 4B!
+## STAT 545B Assignment 4B
 
 This is the repository for Assignment-4b in [__STAT 545B__](https://stat545.stat.ubc.ca/) @ UBC.
 
 
 + Description of what's in this folder:
+This repository contains the assignment instruction(assignment-4B.Rmd, assignment-4B.html) and the make pipeline(make-activity folder) for practice on automation.
+The make pipeline is based on a histogram analysis on the length of words from Webster's Dictionary, and is modified by **adding a new plot histogram_line.png to the original report**. The rational is that although the original discrit(dot) histogram is easier to lookup datapoints, the continuous(line) version displays the general trend clear. 
+
+To engage with this repository, users can try make activities, such as make all, make clean.
 
 + Code to run an .R file in the background:
 
@@ -20,4 +24,4 @@ nohup Rscript script.R > log.out 2>&1 &
 - The final `&` frees up your terminal 
 
 
-The original Make activity was put together by Jenny Bryan's STAT 545 team before 2017, with the associated content available in [stat545.com Chapter 36: Automating Data Analysis Pipelines](https://stat545.com/automating-pipeline.html).
+Attribution: The original Make activity was put together by Jenny Bryan's STAT 545 team before 2017, with the associated content available in [stat545.com Chapter 36: Automating Data Analysis Pipelines](https://stat545.com/automating-pipeline.html).
