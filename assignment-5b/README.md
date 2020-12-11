@@ -1,5 +1,8 @@
-## Welcome to your Assignment 5B!
+# STAT 545B Assignment-5b
 
-You may modify this README accordingly to the instructions from assignment 5B, *including* modifying the title of the README to be the name of your app instead of the current "Welcome to your Assignment 5B!".
+This is the repository for Assignment-1b in [__STAT 545B__](https://stat545.stat.ubc.ca/) @ UBC.
 
-Reminder: please indicate your choice of assignment: Option A, B, or C.
+This assignment is implemented based on **option A: Strings Regex**.
+
+This repository consists of an assignment-5B.Rmd file which holds the reproducible code that can be downloaded or copied, and an assignment-5B.md file that displays the outputs.
+
