@@ -1,4 +1,4 @@
-all: assignment1 assignment3 assignment4
+all: assignment1 assignment3 assignment4 assignment5
 
 clean:
 	rm -f assignment-1b/assignment-1B.md assignment-1b/Rplots.pdf 
@@ -14,3 +14,9 @@ assignment3: assignment-3b/BCL-Shiny/app.R assignment-3b/BCL-Shiny/data/bcl-data
 
 assignment4: assignment-4b/make-activity/Makefile assignment-4b/make-activity/histogram.r assignment-4b/make-activity/report.rmd 
 	cd assignment-4b/make-activity && make all
+
+assignment5: assignment-5b/assignment-5B.Rmd
+	Rscript -e 'rmarkdown::render("$<")'
+	rm -f assignment-5b/assignment-5B.html
+	
+	
